@@ -23,9 +23,20 @@ patient-mpi-system/
 └── .github/         # CI/CD workflows
 ```
 
+## Prerequisites
+- Java 17 or higher
+- Maven 3.6+ (or use Maven wrapper if available)
+- Node.js 18+ and npm (for frontend)
+
 ## How to Run
 
 ### Backend
+```bash
+cd backend
+mvn spring-boot:run
+```
+
+Or if you have Maven wrapper:
 ```bash
 cd backend
 ./mvnw spring-boot:run
@@ -57,6 +68,12 @@ docker-compose up
 - `POST /api/patients/match` - Match incoming patient record
 
 ## Testing
+```bash
+cd backend
+mvn test
+```
+
+Or with Maven wrapper:
 ```bash
 cd backend
 ./mvnw test
