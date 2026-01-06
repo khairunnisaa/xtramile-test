@@ -11,7 +11,7 @@ Simplified Master Patient Index system built with Spring Boot and Angular.
 ## Tech Stack
 - Java 17, Spring Boot 3.x, JPA
 - Angular 17+
-- H2 (in-memory database)
+- H2 (in memory database)
 - Maven
 
 ## Project Structure
