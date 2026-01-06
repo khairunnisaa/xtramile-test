@@ -1,6 +1,7 @@
 package com.xtramile.patient.domain;
 
 import com.xtramile.patient.util.NormalizationUtils;
+import com.xtramile.patient.util.PidValidator;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -37,6 +38,9 @@ public class Patient {
     @Column(name = "phone")
     private String phone;
 
+    @Column(name = "pid")
+    private String pid;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -59,7 +63,8 @@ public class Patient {
             String lastName,
             LocalDate dateOfBirth,
             String gender,
-            String phone
+            String phone,
+            String pid
     ) {
         this.id = id;
         this.firstName = NormalizationUtils.normalize(firstName);
@@ -67,6 +72,7 @@ public class Patient {
         this.dateOfBirth = dateOfBirth;
         this.gender = gender;
         this.phone = NormalizationUtils.normalizePhone(phone);
+        this.pid = formatPid(pid);
     }
 
     public static Patient create(
@@ -74,7 +80,8 @@ public class Patient {
             String lastName,
             LocalDate dateOfBirth,
             String gender,
-            String phone
+            String phone,
+            String pid
     ) {
         return new Patient(
                 UUID.randomUUID(),
@@ -82,7 +89,8 @@ public class Patient {
                 lastName,
                 dateOfBirth,
                 gender,
-                phone
+                phone,
+                pid
         );
     }
 
@@ -97,5 +105,9 @@ public class Patient {
 
     public void addIdentifier(PatientIdentifier identifier) {
         this.identifiers.add(identifier);
+    }
+
+    private String formatPid(String pid) {
+        return pid != null ? PidValidator.format(pid) : null;
     }
 }

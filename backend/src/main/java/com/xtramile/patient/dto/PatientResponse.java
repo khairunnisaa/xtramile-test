@@ -11,11 +11,13 @@ import java.util.UUID;
 @Builder
 public class PatientResponse {
     UUID patientId;
+    String pid;
     String firstName;
     String lastName;
     LocalDate dateOfBirth;
     String gender;
     String phone;
+    AddressDto address;
     LocalDateTime createdAt;
 }
 

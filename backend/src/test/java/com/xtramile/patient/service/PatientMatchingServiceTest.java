@@ -37,7 +37,8 @@ class PatientMatchingServiceTest {
                 "Doe",
                 LocalDate.of(1990, 1, 1),
                 "MALE",
-                "081234567890"
+                "081234567890",
+                "12345678901"
         );
         
         PatientIdentifier phoneId = PatientIdentifier.create(

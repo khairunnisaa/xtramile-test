@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -37,6 +38,9 @@ class PatientControllerTest {
 
     @MockBean
     private com.xtramile.patient.repository.PatientRepository patientRepository;
+
+    @MockBean
+    private com.xtramile.patient.mapper.PatientMapper patientMapper;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -89,13 +93,18 @@ class PatientControllerTest {
         PatientResponse response = PatientResponse.builder()
                 .patientId(UUID.randomUUID())
                 .firstName("John")
+                .lastName("Doe")
+                .dateOfBirth(LocalDate.of(1990, 1, 1))
+                .gender("MALE")
+                .phone("081234567890")
                 .build();
         
-        Page<PatientResponse> page = new PageImpl<>(List.of(response));
+        Page<PatientResponse> page = new PageImpl<>(List.of(response), PageRequest.of(0, 20), 1);
         when(patientService.findAll(any(Pageable.class))).thenReturn(page);
 
         mockMvc.perform(get("/api/patients"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content").isArray());
+                .andExpect(jsonPath("$.content").isArray())
+                .andExpect(jsonPath("$.totalElements").value(1));
     }
 }

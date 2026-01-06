@@ -3,6 +3,11 @@
 <mat-dialog-content>
   <form [formGroup]="patientForm" class="patient-form">
     <mat-form-field appearance="outline">
+      <mat-label>PID (Patient Identity)</mat-label>
+      <input matInput formControlName="pid">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
       <mat-label>First Name</mat-label>
       <input matInput formControlName="firstName" required>
       <mat-error *ngIf="patientForm.get('firstName')?.hasError('required')">
@@ -39,14 +44,35 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Phone</mat-label>
-      <input matInput formControlName="phone" type="tel">
+      <mat-label>Phone No</mat-label>
+      <input matInput formControlName="phone" type="tel" required>
+      <mat-error *ngIf="patientForm.get('phone')?.hasError('required')">
+        Phone number is required
+      </mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Email</mat-label>
-      <input matInput formControlName="email" type="email">
-    </mat-form-field>
+    <div formGroupName="address">
+      <h3>Australian Address</h3>
+      <mat-form-field appearance="outline">
+        <mat-label>Address</mat-label>
+        <input matInput formControlName="address">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Suburb</mat-label>
+        <input matInput formControlName="suburb">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>State</mat-label>
+        <input matInput formControlName="state">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Postcode</mat-label>
+        <input matInput formControlName="postcode">
+      </mat-form-field>
+    </div>
   </form>
 </mat-dialog-content>
 

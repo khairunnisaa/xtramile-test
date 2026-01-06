@@ -28,7 +28,8 @@ class PatientRepositoryTest {
                 "Doe",
                 LocalDate.of(1990, 1, 1),
                 "MALE",
-                "081234567890"
+                "081234567890",
+                "12345678901"
         );
         
         Patient saved = patientRepository.save(patient);
@@ -44,7 +45,8 @@ class PatientRepositoryTest {
                 "Doe",
                 LocalDate.of(1990, 1, 1),
                 "MALE",
-                "081234567890"
+                "081234567890",
+                "12345678901"
         );
         patientRepository.save(patient);
         

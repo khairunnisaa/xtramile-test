@@ -22,12 +22,18 @@ export class PatientFormComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: { patient: Patient | null }
   ) {
     this.patientForm = this.fb.group({
+      pid: [''],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       dateOfBirth: ['', Validators.required],
       gender: [''],
-      phone: [''],
-      email: ['']
+      phone: ['', Validators.required],
+      address: this.fb.group({
+        address: [''],
+        suburb: [''],
+        state: [''],
+        postcode: ['']
+      })
     });
   }
 
@@ -35,12 +41,18 @@ export class PatientFormComponent implements OnInit {
     if (this.data.patient) {
       this.isEditMode = true;
       this.patientForm.patchValue({
+        pid: this.data.patient.pid || '',
         firstName: this.data.patient.firstName,
         lastName: this.data.patient.lastName,
         dateOfBirth: this.data.patient.dateOfBirth || this.data.patient.dob,
         gender: this.data.patient.gender || '',
         phone: this.data.patient.phone || '',
-        email: this.data.patient.email || ''
+        address: this.data.patient.address || {
+          address: '',
+          suburb: '',
+          state: '',
+          postcode: ''
+        }
       });
     }
   }
@@ -49,6 +61,7 @@ export class PatientFormComponent implements OnInit {
     if (this.patientForm.valid) {
       const formValue = this.patientForm.value;
       const patient: any = {
+        pid: formValue.pid || null,
         firstName: formValue.firstName,
         lastName: formValue.lastName,
         dateOfBirth: formValue.dateOfBirth instanceof Date 
@@ -56,7 +69,10 @@ export class PatientFormComponent implements OnInit {
           : formValue.dateOfBirth,
         gender: formValue.gender || null,
         phone: formValue.phone || null,
-        email: formValue.email || null
+        email: null,
+        address: formValue.address && (formValue.address.address || formValue.address.suburb || formValue.address.state || formValue.address.postcode)
+          ? formValue.address
+          : null
       };
 
       if (this.isEditMode && this.data.patient?.id) {

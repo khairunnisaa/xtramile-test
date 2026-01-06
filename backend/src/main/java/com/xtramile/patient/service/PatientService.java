@@ -1,5 +1,6 @@
 package com.xtramile.patient.service;
 
+import com.xtramile.patient.domain.Address;
 import com.xtramile.patient.domain.Patient;
 import com.xtramile.patient.dto.PatientRequest;
 import com.xtramile.patient.dto.PatientResponse;
@@ -54,6 +55,18 @@ public class PatientService {
         existing.updateName(request.getFirstName(), request.getLastName());
         if (request.getPhone() != null) {
             existing.updateContact(request.getPhone());
+        }
+
+        if (request.getAddress() != null) {
+            existing.getAddresses().clear();
+            Address address = Address.create(
+                    existing,
+                    request.getAddress().getAddress(),
+                    request.getAddress().getSuburb(),
+                    request.getAddress().getState(),
+                    request.getAddress().getPostcode()
+            );
+            existing.getAddresses().add(address);
         }
 
         Patient updated = repository.save(existing);
