@@ -53,7 +53,7 @@ The patient matching algorithm determines if an incoming patient record matches 
 
 **Implementation:**
 - Location: `backend/src/main/java/com/xtramile/patient/service/matching/PatientMatchingService.java`
-- Documentation: `docs/matching-algorithm.md`
+- Documentation: [docs/matching-algorithm.md](docs/matching-algorithm.md)
 - API Endpoint: `POST /api/patients/match`
 
 **Matching Rules:**
@@ -61,7 +61,7 @@ The patient matching algorithm determines if an incoming patient record matches 
 - **REVIEW**: Exactly 2 demographic fields match
 - **NO_MATCH**: Less than 2 demographic fields match
 
-See `docs/matching-algorithm.md` for detailed pseudocode and sample inputs/outputs.
+See [docs/matching-algorithm.md](docs/matching-algorithm.md) for detailed pseudocode and sample inputs/outputs.
 
 ### Running Algorithm Tests
 ```bash
