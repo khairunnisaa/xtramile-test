@@ -71,10 +71,19 @@ Backend runs on `http://localhost:8080`
 ```bash
 cd frontend
 npm install
+npm start
+```
+
+Or using Angular CLI directly:
+```bash
+cd frontend
+npm install
 ng serve
 ```
 
 Frontend runs on `http://localhost:4200`
+
+**Note:** Make sure backend is running on `http://localhost:8080` for API calls to work.
 
 ### Using Docker
 ```bash
