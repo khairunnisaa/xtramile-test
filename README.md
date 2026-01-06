@@ -4,8 +4,8 @@ Simplified Master Patient Index system built with Spring Boot and Angular.
 
 ## Features
 - Patient CRUD operations
-- Identifier-based patient matching
-- Server-side pagination
+- Identifier based patient matching
+- Server side pagination
 - Matching decision: AUTO_MATCH, REVIEW, NO_MATCH
 
 ## Tech Stack
