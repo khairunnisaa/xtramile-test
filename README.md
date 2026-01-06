@@ -18,9 +18,32 @@ Simplified Master Patient Index system built with Spring Boot and Angular.
 ```
 patient-mpi-system/
 ├── backend/          # Spring Boot application
+│   └── src/main/java/com/xtramile/algorithm/  # Basic algorithms
+│       ├── UniqueNumbersFinder.java          # Find unique numbers
+│       └── MaxSumFinder.java                 # Largest sum of two elements
 ├── frontend/         # Angular application
 ├── docs/            # Architecture and design docs
 └── .github/         # CI/CD workflows
+```
+
+## Algorithms
+
+Basic algorithm implementations are located in `backend/src/main/java/com/xtramile/algorithm/`:
+
+1. **UniqueNumbersFinder** - Find numbers that occur exactly once
+   - Time complexity: O(n)
+   - Space complexity: O(n)
+   - Location: `backend/src/main/java/com/xtramile/algorithm/UniqueNumbersFinder.java`
+
+2. **MaxSumFinder** - Find largest sum of any two elements
+   - Time complexity: O(n)
+   - Space complexity: O(1)
+   - Location: `backend/src/main/java/com/xtramile/algorithm/MaxSumFinder.java`
+
+### Running Algorithm Tests
+```bash
+cd backend
+mvn test -Dtest=UniqueNumbersFinderTest,MaxSumFinderTest
 ```
 
 ## Prerequisites
