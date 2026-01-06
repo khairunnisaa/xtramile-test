@@ -1,9 +1,13 @@
 export interface Patient {
+  patientId?: string;
   id?: string;
   firstName: string;
   lastName: string;
-  dob: string;
+  dateOfBirth?: string;
+  dob?: string;
   gender?: string;
+  phone?: string;
+  email?: string;
   identifiers?: Identifier[];
   address?: Address;
   createdAt?: string;

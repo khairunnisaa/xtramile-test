@@ -24,8 +24,10 @@ export class PatientFormComponent implements OnInit {
     this.patientForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      dob: ['', Validators.required],
-      gender: ['']
+      dateOfBirth: ['', Validators.required],
+      gender: [''],
+      phone: [''],
+      email: ['']
     });
   }
 
@@ -35,8 +37,10 @@ export class PatientFormComponent implements OnInit {
       this.patientForm.patchValue({
         firstName: this.data.patient.firstName,
         lastName: this.data.patient.lastName,
-        dob: this.data.patient.dob,
-        gender: this.data.patient.gender || ''
+        dateOfBirth: this.data.patient.dateOfBirth || this.data.patient.dob,
+        gender: this.data.patient.gender || '',
+        phone: this.data.patient.phone || '',
+        email: this.data.patient.email || ''
       });
     }
   }
@@ -44,11 +48,15 @@ export class PatientFormComponent implements OnInit {
   onSubmit(): void {
     if (this.patientForm.valid) {
       const formValue = this.patientForm.value;
-      const patient: Patient = {
-        ...formValue,
-        dob: formValue.dob instanceof Date 
-          ? formValue.dob.toISOString().split('T')[0] 
-          : formValue.dob
+      const patient: any = {
+        firstName: formValue.firstName,
+        lastName: formValue.lastName,
+        dateOfBirth: formValue.dateOfBirth instanceof Date 
+          ? formValue.dateOfBirth.toISOString().split('T')[0] 
+          : formValue.dateOfBirth,
+        gender: formValue.gender || null,
+        phone: formValue.phone || null,
+        email: formValue.email || null
       };
 
       if (this.isEditMode && this.data.patient?.id) {

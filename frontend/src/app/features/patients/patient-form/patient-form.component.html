@@ -20,10 +20,10 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Date of Birth</mat-label>
-      <input matInput [matDatepicker]="picker" formControlName="dob" required>
+      <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" required>
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
-      <mat-error *ngIf="patientForm.get('dob')?.hasError('required')">
+      <mat-error *ngIf="patientForm.get('dateOfBirth')?.hasError('required')">
         Date of birth is required
       </mat-error>
     </mat-form-field>
@@ -36,6 +36,16 @@
         <mat-option value="FEMALE">Female</mat-option>
         <mat-option value="OTHER">Other</mat-option>
       </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Phone</mat-label>
+      <input matInput formControlName="phone" type="tel">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" type="email">
     </mat-form-field>
   </form>
 </mat-dialog-content>
