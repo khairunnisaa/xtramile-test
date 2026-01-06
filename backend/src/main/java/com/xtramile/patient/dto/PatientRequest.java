@@ -9,7 +9,6 @@ import java.time.LocalDate;
 
 @Data
 public class PatientRequest {
-    @PidValidation
     private String pid;
     
     @NotBlank(message = "First name is required")

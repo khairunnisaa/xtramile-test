@@ -1,6 +1,7 @@
 package com.xtramile.patient.domain;
 
 import com.xtramile.patient.util.NormalizationUtils;
+import com.xtramile.patient.util.PidGenerator;
 import com.xtramile.patient.util.PidValidator;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -55,6 +56,9 @@ public class Patient {
         if (this.createdAt == null) {
             this.createdAt = LocalDateTime.now();
         }
+        if (this.pid == null || this.pid.isEmpty()) {
+            this.pid = PidGenerator.generate();
+        }
     }
 
     protected Patient(
@@ -83,6 +87,10 @@ public class Patient {
             String phone,
             String pid
     ) {
+        String generatedPid = pid;
+        if (generatedPid == null || generatedPid.isEmpty()) {
+            generatedPid = PidGenerator.generate();
+        }
         return new Patient(
                 UUID.randomUUID(),
                 firstName,
@@ -90,7 +98,7 @@ public class Patient {
                 dateOfBirth,
                 gender,
                 phone,
-                pid
+                generatedPid
         );
     }
 
@@ -107,7 +115,16 @@ public class Patient {
         this.identifiers.add(identifier);
     }
 
+    public void ensurePid() {
+        if (this.pid == null || this.pid.isEmpty()) {
+            this.pid = PidGenerator.generate();
+        }
+    }
+
     private String formatPid(String pid) {
-        return pid != null ? PidValidator.format(pid) : null;
+        if (pid == null || pid.isEmpty()) {
+            return PidGenerator.generate();
+        }
+        return PidValidator.format(pid);
     }
 }

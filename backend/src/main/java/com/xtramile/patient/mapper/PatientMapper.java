@@ -25,7 +25,7 @@ public interface PatientMapper {
                 request.getDateOfBirth(),
                 request.getGender(),
                 request.getPhone(),
-                request.getPid()
+                null
         );
 
         if (request.getPhone() != null && !request.getPhone().isEmpty()) {

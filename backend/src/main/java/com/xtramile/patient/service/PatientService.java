@@ -1,12 +1,16 @@
 package com.xtramile.patient.service;
 
 import com.xtramile.patient.domain.Address;
+import com.xtramile.patient.domain.IdentifierType;
 import com.xtramile.patient.domain.Patient;
 import com.xtramile.patient.dto.PatientRequest;
 import com.xtramile.patient.dto.PatientResponse;
 import com.xtramile.patient.mapper.PatientMapper;
+import com.xtramile.patient.repository.PatientIdentifierRepository;
 import com.xtramile.patient.repository.PatientRepository;
+import com.xtramile.patient.util.NormalizationUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,12 +24,37 @@ public class PatientService {
 
     private final PatientRepository repository;
     private final PatientMapper mapper;
+    private final PatientIdentifierRepository identifierRepository;
 
     @Transactional
     public PatientResponse create(PatientRequest request) {
+        checkForDuplicateIdentifiers(request);
+        
         Patient patient = mapper.toEntity(request);
-        Patient saved = repository.save(patient);
-        return mapper.toResponse(saved);
+        patient.ensurePid();
+        
+        try {
+            Patient saved = repository.save(patient);
+            return mapper.toResponse(saved);
+        } catch (DataIntegrityViolationException e) {
+            throw new RuntimeException("A patient with this phone number or email already exists. Please check for duplicate records.");
+        }
+    }
+
+    private void checkForDuplicateIdentifiers(PatientRequest request) {
+        if (request.getPhone() != null && !request.getPhone().isEmpty()) {
+            String normalizedPhone = NormalizationUtils.normalizePhoneForMatching(request.getPhone());
+            if (!identifierRepository.findAllByTypeAndNormalizedValue(IdentifierType.PHONE, normalizedPhone).isEmpty()) {
+                throw new RuntimeException("A patient with this phone number already exists. Please check for duplicate records.");
+            }
+        }
+        
+        if (request.getEmail() != null && !request.getEmail().isEmpty()) {
+            String normalizedEmail = NormalizationUtils.normalizeForMatching(request.getEmail());
+            if (!identifierRepository.findAllByTypeAndNormalizedValue(IdentifierType.EMAIL, normalizedEmail).isEmpty()) {
+                throw new RuntimeException("A patient with this email address already exists. Please check for duplicate records.");
+            }
+        }
     }
 
     @Transactional(readOnly = true)

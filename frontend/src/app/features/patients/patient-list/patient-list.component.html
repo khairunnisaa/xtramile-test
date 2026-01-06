@@ -13,6 +13,11 @@
   </div>
 
   <table mat-table [dataSource]="dataSource" class="patient-table">
+    <ng-container matColumnDef="pid">
+      <th mat-header-cell *matHeaderCellDef>PID</th>
+      <td mat-cell *matCellDef="let patient">{{ patient.pid || '-' }}</td>
+    </ng-container>
+
     <ng-container matColumnDef="firstName">
       <th mat-header-cell *matHeaderCellDef>First Name</th>
       <td mat-cell *matCellDef="let patient">{{ patient.firstName }}</td>
@@ -25,12 +30,12 @@
 
     <ng-container matColumnDef="dob">
       <th mat-header-cell *matHeaderCellDef>Date of Birth</th>
-      <td mat-cell *matCellDef="let patient">{{ patient.dob }}</td>
+      <td mat-cell *matCellDef="let patient">{{ formatDate(patient.dateOfBirth || patient.dob) }}</td>
     </ng-container>
 
     <ng-container matColumnDef="gender">
       <th mat-header-cell *matHeaderCellDef>Gender</th>
-      <td mat-cell *matCellDef="let patient">{{ patient.gender || '-' }}</td>
+      <td mat-cell *matCellDef="let patient">{{ formatGender(patient.gender) }}</td>
     </ng-container>
 
     <ng-container matColumnDef="actions">

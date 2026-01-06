@@ -13,7 +13,7 @@ import java.util.UUID;
 @Table(
     name = "patient_identifiers",
     uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"type", "normalized_value"})
+        @UniqueConstraint(columnNames = {"patient_id", "type", "normalized_value"})
     },
     indexes = {
         @Index(name = "idx_identifier_normalized", columnList = "normalized_value")

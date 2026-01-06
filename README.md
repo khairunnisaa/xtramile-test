@@ -28,6 +28,8 @@ patient-mpi-system/
 
 ## Algorithms
 
+### Basic Algorithms
+
 Basic algorithm implementations are located in `backend/src/main/java/com/xtramile/algorithm/`:
 
 1. **UniqueNumbersFinder** - Find numbers that occur exactly once
@@ -39,6 +41,27 @@ Basic algorithm implementations are located in `backend/src/main/java/com/xtrami
    - Time complexity: O(n)
    - Space complexity: O(1)
    - Location: `backend/src/main/java/com/xtramile/algorithm/MaxSumFinder.java`
+
+### Patient Matching Algorithm
+
+The patient matching algorithm determines if an incoming patient record matches an existing patient.
+
+**Requirements:**
+- Minimum 2 out of 4 fields matching: (name, dob, phone, email)
+- Normalize fields (lowercase email, remove spaces in phone)
+- Output: AUTO_MATCH, REVIEW, or NO_MATCH
+
+**Implementation:**
+- Location: `backend/src/main/java/com/xtramile/patient/service/matching/PatientMatchingService.java`
+- Documentation: `docs/matching-algorithm.md`
+- API Endpoint: `POST /api/patients/match`
+
+**Matching Rules:**
+- **AUTO_MATCH**: Strong identifier match (PHONE/EMAIL) OR 3+ demographic fields match
+- **REVIEW**: Exactly 2 demographic fields match
+- **NO_MATCH**: Less than 2 demographic fields match
+
+See `docs/matching-algorithm.md` for detailed pseudocode and sample inputs/outputs.
 
 ### Running Algorithm Tests
 ```bash

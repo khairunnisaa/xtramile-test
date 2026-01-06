@@ -22,7 +22,7 @@ export class PatientFormComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: { patient: Patient | null }
   ) {
     this.patientForm = this.fb.group({
-      pid: [''],
+      pid: [{value: '', disabled: true}],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       dateOfBirth: ['', Validators.required],
@@ -40,11 +40,12 @@ export class PatientFormComponent implements OnInit {
   ngOnInit(): void {
     if (this.data.patient) {
       this.isEditMode = true;
+      const dob = this.data.patient.dateOfBirth || this.data.patient.dob;
       this.patientForm.patchValue({
         pid: this.data.patient.pid || '',
         firstName: this.data.patient.firstName,
         lastName: this.data.patient.lastName,
-        dateOfBirth: this.data.patient.dateOfBirth || this.data.patient.dob,
+        dateOfBirth: dob ? new Date(dob) : null,
         gender: this.data.patient.gender || '',
         phone: this.data.patient.phone || '',
         address: this.data.patient.address || {
@@ -61,7 +62,6 @@ export class PatientFormComponent implements OnInit {
     if (this.patientForm.valid) {
       const formValue = this.patientForm.value;
       const patient: any = {
-        pid: formValue.pid || null,
         firstName: formValue.firstName,
         lastName: formValue.lastName,
         dateOfBirth: formValue.dateOfBirth instanceof Date 
@@ -74,16 +74,33 @@ export class PatientFormComponent implements OnInit {
           ? formValue.address
           : null
       };
+      
+      if (this.isEditMode && this.data.patient?.pid) {
+        patient.pid = this.data.patient.pid;
+      }
 
-      if (this.isEditMode && this.data.patient?.id) {
-        this.patientService.updatePatient(this.data.patient.id, patient).subscribe({
+      if (this.isEditMode && this.data.patient) {
+        const patientId = this.data.patient.patientId || this.data.patient.id;
+        if (!patientId) {
+          console.error('Patient ID not found:', this.data.patient);
+          this.snackBar.open('Patient ID not found', 'Close', { duration: 3000 });
+          return;
+        }
+        console.log('Updating patient with ID:', patientId, 'Data:', patient);
+        this.patientService.updatePatient(patientId, patient).subscribe({
           next: () => {
             this.snackBar.open('Patient updated successfully', 'Close', { duration: 3000 });
             this.dialogRef.close(true);
           },
           error: (error) => {
-            this.snackBar.open('Error updating patient', 'Close', { duration: 3000 });
-            console.error(error);
+            let errorMessage = 'Error updating patient';
+            if (error.error && error.error.message) {
+              errorMessage = error.error.message;
+            } else if (error.message) {
+              errorMessage = error.message;
+            }
+            this.snackBar.open(errorMessage, 'Close', { duration: 5000 });
+            console.error('Error updating patient:', error);
           }
         });
       } else {
@@ -93,8 +110,14 @@ export class PatientFormComponent implements OnInit {
             this.dialogRef.close(true);
           },
           error: (error) => {
-            this.snackBar.open('Error creating patient', 'Close', { duration: 3000 });
-            console.error(error);
+            let errorMessage = 'Error creating patient';
+            if (error.error && error.error.message) {
+              errorMessage = error.error.message;
+            } else if (error.message) {
+              errorMessage = error.message;
+            }
+            this.snackBar.open(errorMessage, 'Close', { duration: 5000 });
+            console.error('Error creating patient:', error);
           }
         });
       }

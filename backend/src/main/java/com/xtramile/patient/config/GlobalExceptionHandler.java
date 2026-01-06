@@ -1,5 +1,6 @@
 package com.xtramile.patient.config;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -21,6 +22,29 @@ public class GlobalExceptionHandler {
         body.put("error", "Not Found");
         body.put("message", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Map<String, Object>> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.CONFLICT.value());
+        body.put("error", "Conflict");
+        
+        String message = ex.getMessage();
+        if (message != null && message.contains("PATIENT_IDENTIFIERS")) {
+            if (message.contains("PHONE")) {
+                body.put("message", "A patient with this phone number already exists. Please check for duplicate records.");
+            } else if (message.contains("EMAIL")) {
+                body.put("message", "A patient with this email address already exists. Please check for duplicate records.");
+            } else {
+                body.put("message", "Duplicate patient record detected. This patient may already exist in the system.");
+            }
+        } else {
+            body.put("message", "Duplicate record detected. This data may already exist in the system.");
+        }
+        
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
