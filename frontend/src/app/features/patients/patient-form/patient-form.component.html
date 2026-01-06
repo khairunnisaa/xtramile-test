@@ -1,0 +1,49 @@
+<h2 mat-dialog-title>{{ isEditMode ? 'Edit' : 'Add' }} Patient</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="patientForm" class="patient-form">
+    <mat-form-field appearance="outline">
+      <mat-label>First Name</mat-label>
+      <input matInput formControlName="firstName" required>
+      <mat-error *ngIf="patientForm.get('firstName')?.hasError('required')">
+        First name is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Last Name</mat-label>
+      <input matInput formControlName="lastName" required>
+      <mat-error *ngIf="patientForm.get('lastName')?.hasError('required')">
+        Last name is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Date of Birth</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="dob" required>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error *ngIf="patientForm.get('dob')?.hasError('required')">
+        Date of birth is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Gender</mat-label>
+      <mat-select formControlName="gender">
+        <mat-option value="">None</mat-option>
+        <mat-option value="MALE">Male</mat-option>
+        <mat-option value="FEMALE">Female</mat-option>
+        <mat-option value="OTHER">Other</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="!patientForm.valid">
+    {{ isEditMode ? 'Update' : 'Create' }}
+  </button>
+</mat-dialog-actions>
+
